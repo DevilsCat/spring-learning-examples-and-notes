@@ -4,6 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- The Spring autowire consolewriter and filewriter to the logger.  -->
+	<!-- To use byType, make sure objects are uniquely defined without ambiguous. -->
 	<bean id="logger" class="com.yu.spring.Logger" autowire="byType">
 
 	</bean>

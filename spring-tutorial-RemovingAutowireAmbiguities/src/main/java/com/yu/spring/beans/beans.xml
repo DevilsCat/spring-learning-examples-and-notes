@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-autowire="byType">
+
+	<bean id="logger" class="com.yu.spring.Logger"></bean>
+
+	<!-- We can also use "primary to avoid ambiguities" -->
+	<bean id="consoleWriter" class="com.yu.spring.ConsoleWriter" primary="true"></bean>
+
+	<bean id="fileWriter" class="com.yu.spring.FileWriter"></bean>
+	
+	<bean id="anotherConsoleWriter" class="com.yu.spring.ConsoleWriter"></bean>
+	
+	<!-- Cause some ambiguities -->
+	<!-- Use "autowire-candidate" to exclude from autowiring. -->
+	<bean id="anotherFileWriter" class="com.yu.spring.FileWriter"
+		autowire-candidate="false">
+	</bean>
+	
+	
+</beans>

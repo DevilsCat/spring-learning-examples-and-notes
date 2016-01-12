@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- You cannot mix constructo and byName in xml -->
+	<bean id="logger" class="com.yu.spring.Logger"
+		autowire="constructor">
+
+	</bean>
+
+	<bean id="consoleWriter" class="com.yu.spring.ConsoleWriter"></bean>
+
+	<bean id="fileWriter" class="com.yu.spring.FileWriter"></bean>
+
+</beans>

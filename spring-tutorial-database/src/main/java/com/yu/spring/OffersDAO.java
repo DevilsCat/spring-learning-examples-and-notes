@@ -7,7 +7,6 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -51,31 +50,34 @@ public class OffersDAO {
 
 		});
 	}
-	
+
 	public boolean create(Offer offer) {
 		// It will look into the bean for properties.
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
-		
+		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(
+		        offer);
+
 		return jdbc.update("insert into offers (name, text, email) values (:name, :text, :email)", params) == 1;
 	}
-	
+
 	/**
 	 * Delete a given id from database.
+	 * 
 	 * @param id
-	 * @return   Number of row affected
+	 * @return Number of row affected
 	 */
 	public int delete(int id) {
 		MapSqlParameterSource params = new MapSqlParameterSource("id", id);
-		
+
 		return jdbc.update("delete from offers where id=:id", params);
 	}
-	
+
 	public boolean update(Offer offer) {
 		// It will look into the bean for properties.
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
-				
+		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(
+		        offer);
+
 		return jdbc.update("update offers set name=:name, text=:text, email=:email where id=:id", params) == 1;
-				
+
 	}
 
 	public Offer getOffer(int id) {
@@ -85,17 +87,17 @@ public class OffersDAO {
 		params.addValue("id", id);
 		// Prefix placeholder by column and name.
 		return jdbc.queryForObject("select * from offers where id = :id",
-				params, new RowMapper<Offer>() {
-					public Offer mapRow(ResultSet rs, int rowNum)
-							throws SQLException {
-						Offer offer = new Offer();
-						offer.setId(rs.getInt("id"));
-						offer.setName(rs.getString("name"));
-						offer.setEmail(rs.getString("email"));
-						offer.setText(rs.getString("text"));
-						return offer;
-					}
+		        params, new RowMapper<Offer>() {
+			        public Offer mapRow(ResultSet rs, int rowNum)
+			                throws SQLException {
+				        Offer offer = new Offer();
+				        offer.setId(rs.getInt("id"));
+				        offer.setName(rs.getString("name"));
+				        offer.setEmail(rs.getString("email"));
+				        offer.setText(rs.getString("text"));
+				        return offer;
+			        }
 
-				});
+		        });
 	}
 }

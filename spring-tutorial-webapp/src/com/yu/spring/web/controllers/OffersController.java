@@ -27,12 +27,17 @@ public class OffersController {
         this.offersService = offersService;
     }
 
-    @RequestMapping("/offers/")
+    @RequestMapping("/offers")
     public String showOffers(Model model) {
         
         List<Offer> offers = offersService.getCurrent();
         
         model.addAttribute("offers", offers);
         return "offers";
+    }
+    
+    @RequestMapping("/createoffer")
+    public String createOffer(Model model) {
+        return "createoffer";
     }
 }

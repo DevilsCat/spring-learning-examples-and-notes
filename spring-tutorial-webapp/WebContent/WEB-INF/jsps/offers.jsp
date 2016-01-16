@@ -36,21 +36,8 @@
 
   <b>Offers Table Use DAO</b>
   <br />
-  <table border="1">
-    <tr>
-      <td>id</td>
-      <td>name</td>
-      <td>email</td>
-      <td>text</td>
-    </tr>
-    <c:forEach var="row" items="${offers}">
-      <tr>
-        <td>${row.id}</td>
-        <td>${row.name}</td>
-        <td>${row.email}</td>
-        <td>${row.text}</td>
-      </tr>
-    </c:forEach>
-  </table>
+  <c:forEach var="offer" items="${offers}">
+    <p><c:out value="${offer}"></c:out></p>
+  </c:forEach>
 </body>
 </html>

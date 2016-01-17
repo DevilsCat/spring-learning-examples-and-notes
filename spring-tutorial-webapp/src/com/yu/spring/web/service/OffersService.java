@@ -27,4 +27,8 @@ public class OffersService {
     public List<Offer> getCurrent() {
         return offersDao.getOffers();
     }
+    
+    public Offer getOfferById(int id) {
+        return offersDao.getOffer(id);
+    }
 }

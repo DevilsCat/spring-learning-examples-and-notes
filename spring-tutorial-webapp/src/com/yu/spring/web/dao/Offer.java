@@ -1,5 +1,11 @@
 package com.yu.spring.web.dao;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.yu.spring.web.validations.ValidEmail;
+
 /**
  * Contains a row in the offers table.
  * @author xiaoy
@@ -7,8 +13,18 @@ package com.yu.spring.web.dao;
  */
 public class Offer {
 	private int id;
+	
+	/**
+	 * message can appear on the form.
+	 */
+	@Size(min=5, max=100, message="Name must be between 5 and 100 characters.")
 	private String name;
+	
+	@NotNull
+	@ValidEmail(min=6, message="This email address is invalid.")
 	private String email;
+	
+	@Size(min=20, max=100, message="Text must be between 20 and 255 characters")
 	private String text;
 
 	public Offer() {

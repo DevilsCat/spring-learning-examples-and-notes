@@ -2,12 +2,16 @@ package com.yu.spring.web.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yu.spring.web.dao.Offer;
 import com.yu.spring.web.service.OffersService;
@@ -32,6 +36,8 @@ public class OffersController {
     @RequestMapping("/offers")
     public String showOffers(Model model) {
         
+        offersService.throwTestException();
+        
         List<Offer> offers = offersService.getCurrent();
         
         model.addAttribute("offers", offers);
@@ -40,12 +46,32 @@ public class OffersController {
     
     @RequestMapping("/createoffer")
     public String createOffer(Model model) {
+        
+        model.addAttribute("offer", new Offer());
+        
         return "createoffer";
     }
     
     @RequestMapping(value="/docreate", method=RequestMethod.POST)
-    public String doCreate(Model model, Offer offer) {
-        System.out.println(offer);
+    public String doCreate(Model model, @Valid Offer offer, BindingResult result) {
+        if (result.hasErrors()) {
+            return "createoffer";
+        }
+        
+        offersService.create(offer);
+        
         return "offercreated";
     }
+    
+    
+    
+    /**
+     * Handles all {@link DataAccessException} exceptions.
+     * @param e
+     * @return
+     */
+    /*@ExceptionHandler(DataAccessException.class)
+    public String handleDatabaseException(DataAccessException e) {
+        return "error";
+    }*/
 }

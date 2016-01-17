@@ -22,3 +22,14 @@ textarea {
 .control {
 	margin-left: 10px;
 }
+
+.error {
+	font-size: small;
+	color: red;
+	margin-left: 10px;
+}
+
+table.offers {
+	padding: 20px;
+	border: 1px solid gray;
+}

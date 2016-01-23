@@ -34,7 +34,7 @@ public class OffersController {
     @RequestMapping("/offers")
     public String showOffers(Model model) {
         
-        offersService.throwTestException();
+        //offersService.throwTestException();
         
         List<Offer> offers = offersService.getCurrent();
         

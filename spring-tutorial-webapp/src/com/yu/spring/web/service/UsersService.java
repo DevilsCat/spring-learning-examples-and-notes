@@ -1,5 +1,7 @@
 package com.yu.spring.web.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,10 @@ public class UsersService {
 
     public boolean exists(String username) {
         return usersDao.exists(username);
+    }
+
+    public List<User> getAllUsers() {
+        return usersDao.getAllUsers();
     }
     
 }

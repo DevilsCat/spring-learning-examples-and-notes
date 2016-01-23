@@ -1,5 +1,7 @@
 package com.yu.spring.web.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,13 @@ public class LoginController {
     @RequestMapping("/login")
     public String showLogin() {
         return "login";
+    }
+    
+    @RequestMapping("/admin")
+    public String showAdmin(Model model) {
+        List<User> users = usersService.getAllUsers();
+        model.addAttribute("users", users); 
+        return "admin";
     }
     
     @RequestMapping("/newaccount")

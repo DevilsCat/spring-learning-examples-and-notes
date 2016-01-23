@@ -62,8 +62,7 @@ public class OffersDAO {
      */
     public boolean create(Offer offer) {
         // It will look into the bean for properties.
-        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(
-                offer);
+        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
 
         return jdbc.update("insert into offers (name, text, email) values (:name, :text, :email)", params) == 1;
     }
@@ -106,9 +105,7 @@ public class OffersDAO {
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(
                 offer);
 
-        return jdbc
-                .update("update offers set name=:name, text=:text, email=:email where id=:id",
-                        params) == 1;
+        return jdbc.update("update offers set name=:name, text=:text, email=:email where id=:id", params) == 1;
 
     }
 

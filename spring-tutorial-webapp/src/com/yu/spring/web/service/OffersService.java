@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.yu.spring.web.dao.Offer;
@@ -33,6 +34,7 @@ public class OffersService {
         return offersDao.getOffer(id);
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     public void create(Offer offer) {
         offersDao.create(offer);
     }

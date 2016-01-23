@@ -8,6 +8,6 @@
 </head>
 <body>
 <h4>You have logged out!</h4>
-
+<a href="${pageContext.request.contextPath}/">Back To Home</a>
 </body>
 </html>

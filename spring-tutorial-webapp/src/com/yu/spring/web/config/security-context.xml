@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -21,7 +22,8 @@
 	</security:authentication-manager>
 
 	<security:http use-expressions="true">
-		<security:intercept-url pattern="/admin" access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/admin" access="permitAll" />
+		<!-- security:intercept-url pattern="/admin" access="hasRole('ADMIN')" /-->
 		<security:intercept-url pattern="/createOffer" access="isAuthenticated()" />
 		<security:intercept-url pattern="/doCreate" access="isAuthenticated()" />
 		<security:intercept-url pattern="/offerCreated" access="isAuthenticated()" />
@@ -38,4 +40,6 @@
 			authentication-failure-url="/login?error=true" />
 		<security:logout logout-success-url="/loggedout" />
 	</security:http>
+	<!-- add "secured-annotations" attribute to enable the method-security. -->
+	<security:global-method-security secured-annotations="enabled" />
 </beans>

@@ -34,6 +34,7 @@
 		<security:intercept-url pattern="/accountcreated" access="permitAll" />
 		<security:intercept-url pattern="/static/**" access="permitAll" />
 		<security:intercept-url pattern="/login" access="permitAll" />
+		<security:intercept-url pattern="/denied" access="permitAll" />
 		<security:intercept-url pattern="/offers" access="permitAll" />
 		<security:intercept-url pattern="/**" access="denyAll" />
 		<security:form-login login-page="/login"

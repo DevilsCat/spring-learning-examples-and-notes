@@ -3,8 +3,6 @@ package com.yu.spring.web.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,6 +47,13 @@ public class LoginController {
             return "newaccount";
         }
         
+        usersService.create(user);
+        
         return "accountcreated";
+    }
+    
+    @RequestMapping("/loggedout")
+    public String showLoggedOut() {
+        return "loggedout";
     }
 }

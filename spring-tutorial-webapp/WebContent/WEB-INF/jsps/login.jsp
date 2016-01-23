@@ -12,11 +12,12 @@
 </head>
 <body onload='document.f.username.focus();'>
   <h3>Login with Username and Password</h3>
-  
+
   <c:if test="${param.error != null}">
-  <span class="error">Login failed. Check that your username and password are correct.</span>
+    <span class="error">Login failed. Check that your username
+      and password are correct.</span>
   </c:if>
-  
+
   <form name='f' action='${pageContext.request.contextPath}/login'
     method='POST'>
     <table class="formtable">
@@ -30,6 +31,10 @@
         <td><input type='password' name='password' class="control" /></td>
       </tr>
       <tr>
+        <td>Remember me:</td>
+        <td><input type='checkbox' name="remember-me" checked="checked" class="control"/></td>
+      </tr>
+      <tr>
         <td colspan='2'><input name="submit" type="submit"
           class="control" value="Login" /></td>
       </tr>
@@ -39,7 +44,9 @@
       </tr>
     </table>
   </form>
-  
-  <p><a href='<c:url value="/newaccount"/>'>Create New Account</a></p>
+
+  <p>
+    <a href='<c:url value="/newaccount"/>'>Create New Account</a>
+  </p>
 </body>
 </html>

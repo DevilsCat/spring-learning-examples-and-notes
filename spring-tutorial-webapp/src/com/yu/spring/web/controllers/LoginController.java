@@ -58,7 +58,7 @@ public class LoginController {
             return "newaccount";
         }
         
-        user.setAuthority("user");
+        user.setAuthority("ROLE_USER");
         user.setEnabled(true);
         
         if (usersService.exists(user.getUsername())) { // Better to use this fasion to check duplicates instead of try catch block.

@@ -16,7 +16,6 @@
 	</security:authentication-manager>
 
 	<security:http use-expressions="true">
-		<security:intercept-url pattern="/admin" access="hasRole('ADMIN')" />
 		<security:intercept-url pattern="/createOffer" access="isAuthenticated()" />
 		<security:intercept-url pattern="/doCreate" access="isAuthenticated()" />
 		<security:intercept-url pattern="/offerCreated" access="isAuthenticated()" />
@@ -33,6 +32,7 @@
 		<security:form-login login-page="/login" authentication-failure-url="/login?error=true" />
 		<security:logout logout-success-url="/loggedout" />
 		<security:remember-me key="offersAppKey" user-service-ref="jdbcUserService" />
+		<security:access-denied-handler error-page="/denied" />
 	</security:http>
 	<!-- add "secured-annotations" attribute to enable the method-security. -->
 	<security:global-method-security secured-annotations="enabled" />

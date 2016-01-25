@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.yu.spring.web.dao.Offer;
 import com.yu.spring.web.dao.OffersDAO;
+import com.yu.spring.web.dao.User;
+import com.yu.spring.web.dao.UsersDao;
 
 @ActiveProfiles("dev")
 @ContextConfiguration(locations = {
@@ -31,6 +33,9 @@ public class OffersDaoTests {
     private OffersDAO offersDao;
     
     @Autowired
+    private UsersDao usersDao;
+    
+    @Autowired
     private DataSource dataSource;
     
     @Before
@@ -38,12 +43,14 @@ public class OffersDaoTests {
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
         jdbc.execute("delete from offers");
         jdbc.execute("delete from users");
-        jdbc.execute("delete from authorities");
     }
     
     @Test
     public void testCreateOffer() {
-        Offer offer = new Offer("Yu Xiao", "xiaoyuxqx@gmail.com", "This is a test offer");
+        User user = new User("yxiao", "11111111", "Yu Xiao", "xiaoyuxqx@gmail.com", true, "user");
+        usersDao.create(user);
+        
+        Offer offer = new Offer(user, "This is a test offer");
         assertThat(offersDao.create(offer), is(equalTo(true)));
         
         List<Offer> offers = offersDao.getOffers();

@@ -40,13 +40,18 @@ public class OffersDAO {
      */
     public List<Offer> getOffers() {
         // Prefix placehold by column and name.
-        return jdbc.query("select * from offers", new RowMapper<Offer>() {
+        return jdbc.query("select * from offers, users where offers.username=users.username and users.enabled=true", new RowMapper<Offer>() {
 
             public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                User user = new User();
+                user.setAuthority(rs.getString("authority"));
+                user.setEmail(rs.getString("email"));
+                user.setEnabled(true);
+                user.setName(rs.getString("name"));
+                user.setUsername(rs.getString("username"));
                 Offer offer = new Offer();
+                offer.setUser(user);
                 offer.setId(rs.getInt("id"));
-                offer.setName(rs.getString("name"));
-                offer.setEmail(rs.getString("email"));
                 offer.setText(rs.getString("text"));
                 return offer;
             }
@@ -64,7 +69,7 @@ public class OffersDAO {
         // It will look into the bean for properties.
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
 
-        return jdbc.update("insert into offers (name, text, email) values (:name, :text, :email)", params) == 1;
+        return jdbc.update("insert into offers (username, text) values (:username, :text)", params) == 1;
     }
 
     /**
@@ -79,7 +84,7 @@ public class OffersDAO {
     public int[] create(List<Offer> offers) {
         SqlParameterSource[] params = SqlParameterSourceUtils.createBatch(offers.toArray());
 
-        return jdbc.batchUpdate("insert into offers (name, text, email) values (:name, :text, :email)", params);
+        return jdbc.batchUpdate("insert into offers (username, text) values (:username, :text)", params);
     }
 
     /**
@@ -105,7 +110,7 @@ public class OffersDAO {
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(
                 offer);
 
-        return jdbc.update("update offers set name=:name, text=:text, email=:email where id=:id", params) == 1;
+        return jdbc.update("update offers set text=:text where id=:id", params) == 1;
 
     }
 
@@ -115,14 +120,18 @@ public class OffersDAO {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", id);
         // Prefix placeholder by column and name.
-        return jdbc.queryForObject("select * from offers where id = :id",
+        return jdbc.queryForObject("select * from offers, users where id = :id",
                 params, new RowMapper<Offer>() {
-                    public Offer mapRow(ResultSet rs, int rowNum)
-                            throws SQLException {
+                    public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        User user = new User();
+                        user.setAuthority(rs.getString("authority"));
+                        user.setEmail(rs.getString("email"));
+                        user.setEnabled(true);
+                        user.setName(rs.getString("name"));
+                        user.setUsername(rs.getString("username"));
                         Offer offer = new Offer();
+                        offer.setUser(user);
                         offer.setId(rs.getInt("id"));
-                        offer.setName(rs.getString("name"));
-                        offer.setEmail(rs.getString("email"));
                         offer.setText(rs.getString("text"));
                         return offer;
                     }

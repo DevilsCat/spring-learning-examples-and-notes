@@ -38,12 +38,11 @@ public class UsersDaoTests {
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
         jdbc.execute("delete from offers");
         jdbc.execute("delete from users");
-        jdbc.execute("delete from authorities");
     }
     
     @Test
     public void testCreateUser() {
-        User user = new User("yxiao", "11111111", "xiaoyuxqx@gmail.com", true, "user");
+        User user = new User("yxiao", "11111111", "Yu Xiao", "xiaoyuxqx@gmail.com", true, "user");
         assertThat(usersDao.create(user), is(equalTo(true)));
         
         List<User> users = usersDao.getAllUsers();

@@ -69,7 +69,20 @@ public class OffersDaoTests {
         
         assertThat(updated, is(equalTo(retrieved)));
         
-        offersDao.delete(updated.getId());
+        // Test get by username
+        Offer anotherOffer = new Offer(user, "This is another test offer");
+        
+        assertThat(offersDao.create(anotherOffer), is(equalTo(true)));
+        
+        List<Offer> offersFromYuXiao = offersDao.getOffers("yxiao");
+        
+        assertThat(offersFromYuXiao.size(), is(equalTo(2)));
+        assertThat(offersFromYuXiao, hasItems(new Offer[] {updated, anotherOffer}));
+        
+        // Test delete offers.
+        for (Offer offerToDel : offersFromYuXiao) {
+            offersDao.delete(offerToDel.getId());
+        }
         
         List<Offer> empty = offersDao.getOffers();
         

@@ -40,23 +40,20 @@ public class OffersDAO {
      */
     public List<Offer> getOffers() {
         // Prefix placehold by column and name.
-        return jdbc.query("select * from offers, users where offers.username=users.username and users.enabled=true", new RowMapper<Offer>() {
-
-            public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
-                User user = new User();
-                user.setAuthority(rs.getString("authority"));
-                user.setEmail(rs.getString("email"));
-                user.setEnabled(true);
-                user.setName(rs.getString("name"));
-                user.setUsername(rs.getString("username"));
-                Offer offer = new Offer();
-                offer.setUser(user);
-                offer.setId(rs.getInt("id"));
-                offer.setText(rs.getString("text"));
-                return offer;
-            }
-
-        });
+        return jdbc.query("select * from offers, users where offers.username=users.username and users.enabled=true",
+                new OfferRowMapper());
+    }
+    
+    private static String GET_OFFERS_BY_USERNAME = 
+              "select * from offers, users " + 
+              "where offers.username=users.username and users.enabled=true and offers.username = :username";
+    
+    public List<Offer> getOffers(String username) {
+        // Prefix placehold by column and name.
+        return jdbc.query(GET_OFFERS_BY_USERNAME,
+                new MapSqlParameterSource("username", username),
+                new OfferRowMapper()
+        );
     }
 
     /**
@@ -120,22 +117,7 @@ public class OffersDAO {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", id);
         // Prefix placeholder by column and name.
-        return jdbc.queryForObject("select * from offers, users where id = :id",
-                params, new RowMapper<Offer>() {
-                    public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        User user = new User();
-                        user.setAuthority(rs.getString("authority"));
-                        user.setEmail(rs.getString("email"));
-                        user.setEnabled(true);
-                        user.setName(rs.getString("name"));
-                        user.setUsername(rs.getString("username"));
-                        Offer offer = new Offer();
-                        offer.setUser(user);
-                        offer.setId(rs.getInt("id"));
-                        offer.setText(rs.getString("text"));
-                        return offer;
-                    }
-
-                });
+        return jdbc.queryForObject("select * from offers, users where id = :id", params, 
+                new OfferRowMapper());
     }
 }

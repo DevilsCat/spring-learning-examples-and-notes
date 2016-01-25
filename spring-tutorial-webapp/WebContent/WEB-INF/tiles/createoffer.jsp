@@ -6,11 +6,12 @@
 <!-- Added commandName: model attribute. Controller creates a bean and "taglib" 
      saves the value to the object and retrieved it. -->
 <sf:form method="post" action="${pageContext.request.contextPath}/docreate" commandName="offer">
+<sf:input type="hidden" name="id" path="id"/>
 
 <!-- Added spring validator, use "sf" as prefix. -->
 <table class="formtable">
 <tr><td class="label">Your offer: </td><td><sf:textarea class="control" path="text" name="text"></sf:textarea><br/><sf:errors path="text" cssClass="error"></sf:errors></td></tr>
-<tr><td class="label"> </td><td><input class="control" value="Create advert" type="submit"></td></tr>
+<tr><td class="label"> </td><td><input class="control" value="Save advert" type="submit"></td></tr>
 </table>
 
 </sf:form> 

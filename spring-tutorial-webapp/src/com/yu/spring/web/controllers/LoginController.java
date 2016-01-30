@@ -2,15 +2,15 @@ package com.yu.spring.web.controllers;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.yu.spring.web.dao.FormValidationGroup;
 import com.yu.spring.web.dao.User;
 import com.yu.spring.web.service.UsersService;
 
@@ -53,7 +53,7 @@ public class LoginController {
     }
     
     @RequestMapping(value="/createaccount", method=RequestMethod.POST)
-    public String createAccount(@Valid User user, BindingResult result) {
+    public String createAccount(@Validated(FormValidationGroup.class) User user, BindingResult result) {
         if (result.hasErrors()) {
             return "newaccount";
         }

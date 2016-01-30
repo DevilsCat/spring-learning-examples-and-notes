@@ -36,7 +36,7 @@ public class UsersDao {
     }
     
     public void create(User user) {  
-        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         session().save(user);
     }
 

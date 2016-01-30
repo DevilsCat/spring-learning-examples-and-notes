@@ -14,24 +14,24 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name="users")
 public class User {
 
-    @NotBlank(message="Username cannot be blank.")
-    @Size(min=4, max=15, message="Username must be between 4 and 15 characters long.")
-    @Pattern(regexp="^[a-zA-Z0-9]*$", message="Username can only consist of numbers, letters and underscore characters")
+    @NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Username cannot be blank.")
+    @Size(min=4, max=15, groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Username must be between 4 and 15 characters long.")
+    @Pattern(regexp="^[a-zA-Z0-9]*$", groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Username can only consist of numbers, letters and underscore characters")
     @Id
     @Column(name="username")
     private String username;
     
-    @NotBlank(message="Password cannot be blank.")
-    @Pattern(regexp="^\\S+$", message="Password should not contains space.")
-    @Size(min=4, max=15, message="Password must be between 4 and 15 characters long.")
+    @NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Password cannot be blank.")
+    @Pattern(regexp="^\\S+$", groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Password should not contains space.")
+    @Size(min=4, max=15, groups={FormValidationGroup.class}, message="Password must be between 4 and 15 characters long.")
     private String password;
     
-    @NotBlank(message="Email cannot be blank.")
-    @Email(message="This does not appear to be a valid email.")
+    @NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Email cannot be blank.")
+    @Email(groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="This does not appear to be a valid email.")
     private String email;
     
-    @NotBlank(message="Name cannot be blank.")
-    @Size(min=4, max=60, message="Name must be between 4 and 60 characters long.")
+    @NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Name cannot be blank.")
+    @Size(min=4, max=60, groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Name must be between 4 and 60 characters long.")
     private String name;
     
     private boolean enabled = false;

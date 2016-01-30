@@ -1,21 +1,29 @@
 package com.yu.spring.web.dao;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+@Entity
+@Table(name="users")
 public class User {
 
     @NotBlank(message="Username cannot be blank.")
-    @Size(min=8, max=15, message="Username must be between 8 and 15 characters long.")
+    @Size(min=4, max=15, message="Username must be between 4 and 15 characters long.")
     @Pattern(regexp="^[a-zA-Z0-9]*$", message="Username can only consist of numbers, letters and underscore characters")
+    @Id
+    @Column(name="username")
     private String username;
     
     @NotBlank(message="Password cannot be blank.")
     @Pattern(regexp="^\\S+$", message="Password should not contains space.")
-    @Size(min=8, max=15, message="Password must be between 8 and 15 characters long.")
+    @Size(min=4, max=15, message="Password must be between 4 and 15 characters long.")
     private String password;
     
     @NotBlank(message="Email cannot be blank.")
@@ -23,7 +31,7 @@ public class User {
     private String email;
     
     @NotBlank(message="Name cannot be blank.")
-    @Size(min=8, max=60, message="Name must be between 8 and 60 characters long.")
+    @Size(min=4, max=60, message="Name must be between 4 and 60 characters long.")
     private String name;
     
     private boolean enabled = false;

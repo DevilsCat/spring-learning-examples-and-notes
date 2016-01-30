@@ -4,13 +4,17 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
+@SuppressWarnings("unchecked")
 @Component("usersDao")
 public class UsersDao {
     
@@ -20,22 +24,20 @@ public class UsersDao {
     private PasswordEncoder passwordEncoder;
     
     @Autowired
+    private SessionFactory sessionFactory;
+    
+    @Autowired
     public void setDataSource(DataSource jdbc) {
         this.jdbc = new NamedParameterJdbcTemplate(jdbc);
     }
     
-    public boolean create(User user) {
-        
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        
-        params.addValue("username", user.getUsername());
-        params.addValue("password", passwordEncoder.encode(user.getPassword()));
-        params.addValue("email", user.getEmail());
-        params.addValue("name", user.getName());
-        params.addValue("enabled", user.isEnabled());
-        params.addValue("authority", user.getAuthority());
-        
-        return jdbc.update("insert into users (username, password, email, name, enabled, authority) values (:username, :password, :email, :name, :enabled, :authority)", params) == 1;
+    public Session session() {
+        return sessionFactory.getCurrentSession();
+    }
+    
+    public void create(User user) {  
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+        session().save(user);
     }
 
     public boolean exists(String username) {
@@ -44,13 +46,8 @@ public class UsersDao {
                 new MapSqlParameterSource("username", username), Integer.class) > 0;
     }
 
-    /**
-     * {@link BeanPropertyRowMapper}: Takes the result from sql, and map to the bean class
-     * @return
-     */
     public List<User> getAllUsers() {
-        return jdbc.query("select * from users", 
-                BeanPropertyRowMapper.newInstance(User.class));
+        return (List<User>)session().createQuery("from User").list();
     }
     
     

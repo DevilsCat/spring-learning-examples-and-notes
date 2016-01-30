@@ -1,7 +1,7 @@
 package com.yu.spring.web.test.tests;
 
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 
@@ -33,6 +33,15 @@ public class UsersDaoTests {
     @Autowired
     private DataSource dataSource;
     
+    private User user1 = new User("admin", "11111111", "Administrator", 
+            "admin@google.com", true, "ROLE_ADMIN");
+    private User user2 = new User("johnpurcell", "hellothere", "John Purcell", 
+            "john@google.com", true, "ROLE_USER");
+    private User user3 = new User("yxiao", "2333333333", "Yu Xiao", 
+            "xiaoyuxqx@google.com", true, "ROLE_USER");
+    private User user4 = new User("anqi", "666666666", "Anqi Zhang", 
+            "zhanganqi@google.com", true, "ROLE_USER");
+    
     @Before
     public void init() {
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
@@ -41,9 +50,27 @@ public class UsersDaoTests {
     }
     
     @Test
+    public void testCreateRetrieve() {
+        usersDao.create(user1);
+        List<User> users1 = usersDao.getAllUsers();
+        assertThat("After assert: ", users1, hasSize(1));
+        assertThat("Then retrieve user should be", users1.get(0), is(user1));
+        
+        usersDao.create(user2);
+        usersDao.create(user3);
+        usersDao.create(user4);
+        
+        List<User> users2 = usersDao.getAllUsers();
+        
+        assertThat("Assert 3 more users", users2, hasSize(4));
+        assertThat(users2, containsInAnyOrder(user1, user2, user3, user4));
+    }
+    
+    // TODO - Reimplement this
+    @Test
     public void testCreateUser() {
         User user = new User("yxiao", "11111111", "Yu Xiao", "xiaoyuxqx@gmail.com", true, "user");
-        assertThat(usersDao.create(user), is(equalTo(true)));
+        usersDao.create(user);
         
         List<User> users = usersDao.getAllUsers();
         

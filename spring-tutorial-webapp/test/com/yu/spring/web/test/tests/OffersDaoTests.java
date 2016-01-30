@@ -1,7 +1,7 @@
 package com.yu.spring.web.test.tests;
 
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 
@@ -38,6 +38,23 @@ public class OffersDaoTests {
     @Autowired
     private DataSource dataSource;
     
+    private User user1 = new User("admin", "11111111", "Administrator", 
+            "admin@google.com", true, "ROLE_ADMIN");
+    private User user2 = new User("johnpurcell", "hellothere", "John Purcell", 
+            "john@google.com", true, "ROLE_USER");
+    private User user3 = new User("yxiao", "2333333333", "Yu Xiao", 
+            "xiaoyuxqx@google.com", true, "ROLE_USER");
+    private User user4 = new User("anqi", "666666666", "Anqi Zhang", 
+            "zhanganqi@google.com", false, "ROLE_USER");
+    
+    private Offer offer1 = new Offer(user1, "This is a test offer.");
+    private Offer offer2 = new Offer(user1, "This is a test offer.");
+    private Offer offer3 = new Offer(user2, "This is a test offer.");
+    private Offer offer4 = new Offer(user3, "This is a test offer.");
+    private Offer offer5 = new Offer(user3, "This is a test offer.");
+    private Offer offer6 = new Offer(user3, "This is a test offer.");
+    private Offer offer7 = new Offer(user4, "This is a test offer for a user that is not enabled.");
+    
     @Before
     public void init() {
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
@@ -46,12 +63,101 @@ public class OffersDaoTests {
     }
     
     @Test
+    public void testCreateRetrieve() { 
+        usersDao.create(user1);
+        usersDao.create(user2);
+        usersDao.create(user3);
+        usersDao.create(user4);
+        
+        offersDao.saveOrUpdate(offer1);
+        
+        assertThat(offersDao.getOffers(), hasSize(1));
+        assertThat(offersDao.getOffers(), hasItem(offer1));
+        
+        offersDao.saveOrUpdate(offer2);
+        offersDao.saveOrUpdate(offer3);
+        offersDao.saveOrUpdate(offer4);
+        offersDao.saveOrUpdate(offer5);
+        offersDao.saveOrUpdate(offer6);
+        offersDao.saveOrUpdate(offer7);
+
+        assertThat(offersDao.getOffers(), hasSize(6));
+    }
+    
+    @Test
+    public void testGetUsername() {
+        usersDao.create(user1);
+        usersDao.create(user2);
+        usersDao.create(user3);
+        usersDao.create(user4);
+        
+        offersDao.saveOrUpdate(offer1);
+        offersDao.saveOrUpdate(offer2);
+        offersDao.saveOrUpdate(offer3);
+        offersDao.saveOrUpdate(offer4);
+        offersDao.saveOrUpdate(offer5);
+        offersDao.saveOrUpdate(offer6);
+        offersDao.saveOrUpdate(offer7);
+        
+        // Retrieve offers exists.
+        assertThat(offersDao.getOffers(user3.getUsername()), hasSize(3));
+        
+        // Retrieve offers does NOT exist.
+        assertThat(offersDao.getOffers("Non-existed user"), is(empty()));
+        
+        // Retrieve only one offer
+        assertThat(offersDao.getOffers(user2.getUsername()), hasSize(1));
+    }
+    
+    @Test
+    public void testUpdate() {
+        usersDao.create(user1);
+        usersDao.create(user2);
+        usersDao.create(user3);
+        usersDao.create(user4);
+        
+        offersDao.saveOrUpdate(offer1);
+        offersDao.saveOrUpdate(offer2);
+        offersDao.saveOrUpdate(offer3);
+        offersDao.saveOrUpdate(offer4);
+        offersDao.saveOrUpdate(offer5);
+        offersDao.saveOrUpdate(offer6);
+        offersDao.saveOrUpdate(offer7);
+                
+        offer3.setText("This offer has updated text.");
+        offersDao.saveOrUpdate(offer3);
+
+        Offer retrieved = offersDao.getOffer(offer3.getId());
+        assertThat(retrieved, is(equalTo(offer3)));
+    }
+    
+    @Test
+    public void testDelete() {
+        usersDao.create(user1);
+        usersDao.create(user2);
+        usersDao.create(user3);
+        usersDao.create(user4);
+        
+        offersDao.saveOrUpdate(offer1);
+        offersDao.saveOrUpdate(offer2);
+        offersDao.saveOrUpdate(offer3);
+        offersDao.saveOrUpdate(offer4);
+        offersDao.saveOrUpdate(offer5);
+        offersDao.saveOrUpdate(offer6);
+        offersDao.saveOrUpdate(offer7);
+        
+        assertThat(offersDao.getOffer(offer2.getId()), is(not(nullValue())));
+        offersDao.delete(offer2.getId());
+        assertThat(offersDao.getOffer(offer2.getId()), is(nullValue()));
+    }
+    
+    @Test
     public void testCreateOffer() {
         User user = new User("yxiao", "11111111", "Yu Xiao", "xiaoyuxqx@gmail.com", true, "user");
         usersDao.create(user);
         
         Offer offer = new Offer(user, "This is a test offer");
-        assertThat(offersDao.create(offer), is(equalTo(true)));
+        offersDao.saveOrUpdate(offer);
         
         List<Offer> offers = offersDao.getOffers();
         
@@ -63,7 +169,7 @@ public class OffersDaoTests {
         
         retrieved.setText("Update offer text");
         
-        assertThat(offersDao.update(retrieved), is(equalTo(true)));
+        offersDao.saveOrUpdate(retrieved);
         
         Offer updated = offersDao.getOffer(retrieved.getId());
         
@@ -72,7 +178,7 @@ public class OffersDaoTests {
         // Test get by username
         Offer anotherOffer = new Offer(user, "This is another test offer");
         
-        assertThat(offersDao.create(anotherOffer), is(equalTo(true)));
+        offersDao.saveOrUpdate(anotherOffer);
         
         List<Offer> offersFromYuXiao = offersDao.getOffers("yxiao");
         

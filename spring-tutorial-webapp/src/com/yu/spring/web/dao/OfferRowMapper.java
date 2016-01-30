@@ -5,8 +5,6 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-
-
 public class OfferRowMapper implements RowMapper<Offer> {
 
     @Override

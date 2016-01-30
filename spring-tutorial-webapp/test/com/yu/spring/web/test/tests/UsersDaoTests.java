@@ -65,19 +65,15 @@ public class UsersDaoTests {
         assertThat("Assert 3 more users", users2, hasSize(4));
         assertThat(users2, containsInAnyOrder(user1, user2, user3, user4));
     }
-    
-    // TODO - Reimplement this
+
     @Test
-    public void testCreateUser() {
-        User user = new User("yxiao", "11111111", "Yu Xiao", "xiaoyuxqx@gmail.com", true, "user");
-        usersDao.create(user);
+    public void testExists() {
+        usersDao.create(user1);
+        usersDao.create(user2);
+        usersDao.create(user4);
         
-        List<User> users = usersDao.getAllUsers();
-        
-        assertThat(users.size(), is(equalTo(1)));
-        
-        assertThat(usersDao.exists(user.getUsername()), is(equalTo(true)));
-    
-        assertThat(users.get(0), is(equalTo(user)));
+        assertThat(usersDao.exists(user1.getUsername()), is(equalTo(true)));
+        assertThat(usersDao.exists("Non-exist name"), is(equalTo(false)));
     }
+
 }

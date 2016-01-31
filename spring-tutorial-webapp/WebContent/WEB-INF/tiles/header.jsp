@@ -12,10 +12,5 @@
 <!-- Security authorization makes the "Log out" link appear when
        user has already logged in -->
 <sec:authorize access="isAuthenticated()">
-  <c:url var="logoutUrl" value="/logout" />
-  <form action="${logoutUrl}" id="logout" method="post">
-    <input type="hidden" name="${_csrf.parameterName}"
-      value="${_csrf.token}" />
-  </form>
-  <a class="login" href="#" onclick="document.getElementById('logout').submit();">Logout</a>
+<a class="login" href="<c:url value='/j_spring_security_logout'/>">Log out</a>
 </sec:authorize>

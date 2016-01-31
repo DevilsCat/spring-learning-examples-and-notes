@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:webflow-config="http://www.springframework.org/schema/webflow-config"
 	xsi:schemaLocation="http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.3.xsd
@@ -18,8 +19,7 @@
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename"
-			value="com.yu.spring.web.messages.messages"></property>
+		<property name="basename" value="com.yu.spring.web.messages.messages"></property>
 	</bean>
 
 	<bean id="tilesViewResolver"
@@ -36,10 +36,41 @@
 		</property>
 	</bean>
 
+	<!-- has url path /message -->
 	<webflow-config:flow-registry id="flowRegistry"
-		base-path="/WEB-INF/flows">
+		base-path="/WEB-INF/flows" flow-builder-services="flowBuilderServices">
 		<webflow-config:flow-location path="contact-flow.xml"
 			id="message">
 		</webflow-config:flow-location>
 	</webflow-config:flow-registry>
+
+	<webflow-config:flow-executor id="flowExecutor"
+		flow-registry="flowRegistry">
+	</webflow-config:flow-executor>
+
+	<!-- Find the executor -->
+	<bean id="flowHandlerAdapter"
+		class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+		<property name="flowExecutor" ref="flowExecutor"></property>
+	</bean>
+
+	<!-- Recognize Url coming -->
+	<bean id="flowHandlerMapping"
+		class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+		<property name="flowRegistry" ref="flowRegistry"></property>
+		<property name="order" value="0"></property>
+	</bean>
+	
+	<webflow-config:flow-builder-services
+		id="flowBuilderServices" view-factory-creator="mvcViewFactoryCreator" validator="validator"/>
+		
+	<bean id="mvcViewFactoryCreator"
+		class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+		<property name="viewResolvers" ref="tilesViewResolver"></property>
+	</bean>
+	
+	<!-- validate the web flow message form -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+	</bean>
 </beans>

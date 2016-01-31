@@ -1,5 +1,7 @@
 package com.yu.spring.web.dao;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +14,9 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements Serializable {
+    
+    private static final long serialVersionUID = 4270306590531879350L;
 
     @NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Username cannot be blank.")
     @Size(min=4, max=15, groups={PersistenceValidationGroup.class, FormValidationGroup.class}, message="Username must be between 4 and 15 characters long.")

@@ -16,6 +16,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.yu.spring.web.dao.Message;
+import com.yu.spring.web.dao.MessagesDao;
+import com.yu.spring.web.dao.OffersDAO;
 import com.yu.spring.web.dao.User;
 import com.yu.spring.web.dao.UsersDao;
 
@@ -23,12 +26,18 @@ import com.yu.spring.web.dao.UsersDao;
 @ContextConfiguration(locations = {
         "classpath:com/yu/spring/web/config/dao-context.xml",
         "classpath:com/yu/spring/web/config/security-context.xml",
-        "classpath:com/yu/spring/web/test/config/dataSource.xml"})
+        "classpath:com/yu/spring/web/test/config/dataSource.xml"
+})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UsersDaoTests {
+public class MessagesDaoTests {
+    @Autowired
+    private OffersDAO offersDao;
     
     @Autowired
     private UsersDao usersDao;
+    
+    @Autowired
+    private MessagesDao messagesDao;
     
     @Autowired
     private DataSource dataSource;
@@ -37,10 +46,11 @@ public class UsersDaoTests {
             "admin@google.com", true, "ROLE_ADMIN");
     private User user2 = new User("johnpurcell", "hellothere", "John Purcell", 
             "john@google.com", true, "ROLE_USER");
-    private User user3 = new User("yxiao", "2333333333", "Yu Xiao", 
-            "xiaoyuxqx@google.com", true, "ROLE_USER");
-    private User user4 = new User("anqi", "666666666", "Anqi Zhang", 
-            "zhanganqi@google.com", true, "ROLE_USER");
+    
+    Message message1 = new Message("Test Subject 1", "Test content 1", "Isoac Newton", "newton@gmail.com", user1.getUsername());
+    Message message2 = new Message("Test Subject 1", "Test content 1", "Isoac Newton", "newton@gmail.com", user1.getUsername());
+    Message message3 = new Message("Test Subject 1", "Test content 1", "Isoac Newton", "newton@gmail.com", user1.getUsername());
+    
     
     @Before
     public void init() {
@@ -51,30 +61,37 @@ public class UsersDaoTests {
     }
     
     @Test
-    public void testCreateRetrieve() {
+    public void testSave() {
         usersDao.create(user1);
-        List<User> users1 = usersDao.getAllUsers();
-        assertThat("After assert: ", users1, hasSize(1));
-        assertThat("Then retrieve user should be", users1.get(0), is(user1));
-        
         usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
         
-        List<User> users2 = usersDao.getAllUsers();
+        messagesDao.saveOrUpdate(message1);
+        messagesDao.saveOrUpdate(message2);
+        messagesDao.saveOrUpdate(message3);
         
-        assertThat("Assert 3 more users", users2, hasSize(4));
-        assertThat(users2, containsInAnyOrder(user1, user2, user3, user4));
+        List<Message> messages = messagesDao.getMessages(user1.getUsername());
+        assertThat(messages, hasSize(3));
+        assertThat(messages, hasItems(message1, message2, message3));
     }
-
+    
     @Test
-    public void testExists() {
+    public void testDelete() {
         usersDao.create(user1);
         usersDao.create(user2);
-        usersDao.create(user4);
         
-        assertThat(usersDao.exists(user1.getUsername()), is(equalTo(true)));
-        assertThat(usersDao.exists("Non-exist name"), is(equalTo(false)));
+        messagesDao.saveOrUpdate(message1);
+        messagesDao.saveOrUpdate(message2);
+        messagesDao.saveOrUpdate(message3);
+        
+        List<Message> messages = messagesDao.getMessages(user1.getUsername());
+        
+        Message toDelete = messages.get(1);
+        
+        assertThat("Before delete", messagesDao.getMessage(toDelete.getId()), is(not(nullValue())));
+        
+        messagesDao.delete(toDelete.getId());
+        
+        assertThat("After delete", messagesDao.getMessage(toDelete.getId()), is(nullValue()));
     }
-
+    
 }

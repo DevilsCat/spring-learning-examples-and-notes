@@ -67,6 +67,17 @@ div.header {
 	background-color: red;	
 }
 
+div.toolbar {
+	position: relative;
+	padding-left: 40px;
+	margin-top: 10px;
+}
+
+div.toolbar div {
+	display: inline-block;
+	padding-left: 5px;
+}
+
 a.login {
 	position: absolute;
 	top: 10px;
@@ -81,4 +92,68 @@ a.title {
 
 input.delete {
 	border: 1px solid red;
+}
+
+table.offers td {
+	border-bottom: 1px dashed brown;
+	padding-bottom: 5px;
+}
+
+td.name {
+	width: 100px;
+	vertical-align: top;
+}
+
+td.contact {
+	padding: 0px 10px;
+	vertical-align: top;
+}
+
+td.offer {}
+
+.message {
+	margin-bottom: 20px;
+	border-bottom: 1px dashed brown;
+}
+
+span.subject {
+	font-size: large;
+	color: brown;
+	font-weight: bold;
+}
+
+span.messagebody {
+	display: block;
+	font-style: italic;
+}
+
+span.nameemail {
+	color: brown;
+	font-size: medium;
+}
+
+form.replyform {
+	padding: 20px;
+	display: none;
+}
+
+textarea.replyarea {
+	width: 400px;
+	height: 250px;
+}
+
+input.replybutton {
+	display: block;
+	font-size: large;
+	border: 1px grey;
+}
+
+a.replylink:link {
+	color: brown;
+}
+
+span.alert {
+	display: block;
+	font-weight: bold;
+	color: green;
 }

@@ -70,5 +70,4 @@ public class LoginController {
         
         return "accountcreated";
     }
-
 }

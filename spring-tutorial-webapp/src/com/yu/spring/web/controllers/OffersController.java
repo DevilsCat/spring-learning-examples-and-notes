@@ -67,19 +67,7 @@ public class OffersController {
             offersService.delete(offer.getId());
             return "offerdeleted";
         }
-        
-        
+           
     }
     
-    
-    
-    /**
-     * Handles all {@link DataAccessException} exceptions.
-     * @param e
-     * @return
-     */
-    /*@ExceptionHandler(DataAccessException.class)
-    public String handleDatabaseException(DataAccessException e) {
-        return "error";
-    }*/
 }
